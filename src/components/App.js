@@ -13,7 +13,33 @@ const handleClick = (ev) => {
   console.log(numberOfErrors);
 }
 
-  let data = [];
+const [lastLetter, setLastLetter] = useState('');
+
+const handleImput = (ev) => {
+
+  if( ev.target.value.search( /[a-zñáéíóúA-ZÑÁÉÍÓÚ]/ ) !== -1 ) {
+    setLastLetter(ev.target.value);
+    userLetters.push(ev.target.value)
+    console.log(userLetters);
+  }
+}
+const userLetters = [];
+
+const getWordFromApi = () => {  
+return fetch('https://adalab-api.herokuapp.com/api/random/word/')    
+.then(response => response.json())    
+.then(response => {      
+
+return response.word; 
+
+console.log(response.word);
+});};
+getWordFromApi();
+
+
+
+
+  /*let data = [];
 
   const getData = () => {
     fetch('https://palabras-aleatorias-public-api.herokuapp.com/random')
@@ -27,6 +53,7 @@ const handleClick = (ev) => {
 };
 
   getData();
+*/
 
   return (
  
@@ -64,10 +91,12 @@ const handleClick = (ev) => {
               type="text"
               name="last-letter"
               id="last-letter"
+              value={lastLetter}
+              onChange={handleImput}
             />
           </form>
         </section>
-        <section className="`dummy error-${numberOfErrors}`">
+        <section className={`dummy error-${numberOfErrors}`}>
           <span className="error-13 eye"></span>
           <span className="error-12 eye"></span>
           <span className="error-11 line"></span>
