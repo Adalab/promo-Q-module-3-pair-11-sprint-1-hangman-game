@@ -1,30 +1,41 @@
 
 import { useState } from 'react';
 import '../styles/App.scss';
-export default App;
+
+
 
 function App() {
 
+  //variables de estado
 const [numberOfErrors, setNumberOfErrors] = useState(0);
+const [lastLetter, setLastLetter] = useState('');
+const [userLetters, setUserLetters] = useState ([]);
+const [word, setWord] = useState('katakroker');
 
+
+//eventos
 const handleClick = (ev) => {
   ev.preventDefault();
   setNumberOfErrors(numberOfErrors +1); 
   console.log(numberOfErrors);
 }
 
-const [lastLetter, setLastLetter] = useState('');
 
-const handleImput = (ev) => {
+
+const handleInput = (ev) => {
 
   if( ev.target.value.search( /[a-zñáéíóúA-ZÑÁÉÍÓÚ]/ ) !== -1 ) {
     setLastLetter(ev.target.value);
-    userLetters.push(ev.target.value)
+    setUserLetters([...userLetters, ev.target.value])
     console.log(userLetters);
   }
-}
-const userLetters = [];
+  else{
+    setLastLetter("");
+    
+  }
+};
 
+//fetch
 const getWordFromApi = () => {  
 return fetch('https://adalab-api.herokuapp.com/api/random/word/')    
 .then(response => response.json())    
@@ -32,12 +43,20 @@ return fetch('https://adalab-api.herokuapp.com/api/random/word/')
 
 return response.word; 
 
-console.log(response.word);
+
 });};
 getWordFromApi();
 
 
+//functions
 
+const renderSolutionLetters = () =>{
+  const wordLetters = word.split('');
+  console.log(wordLetters)
+  wordLetters.map = ((letter) => {
+    return <li class="letter">{letter}</li>
+  })
+}
 
   /*let data = [];
 
@@ -65,6 +84,7 @@ getWordFromApi();
         <section>
           <div className="solution">
             <h2 className="title">Solución:</h2>
+            <p>{renderSolutionLetters()}</p>
             
             <ul className="letters">
              
@@ -92,7 +112,7 @@ getWordFromApi();
               name="last-letter"
               id="last-letter"
               value={lastLetter}
-              onChange={handleImput}
+              onChange={handleInput}
             />
           </form>
         </section>
@@ -121,3 +141,6 @@ getWordFromApi();
 
 };
 
+
+
+export default App;
